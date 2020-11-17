@@ -1,0 +1,61 @@
+# Aufgabe a.
+
+```{r, eval = FALSE}
+set.seed(20141012)
+x <- sample(x = c(1:10, NA), size = 20, replace = TRUE)
+y <- runif(n = 20, min = 0, max = 1)
+```
+Die Reihenfolge der übergebenen Argumente umgeordnet und explizit den Namen für
+`size` bzw. `n`angegeben.
+
+
+```{r, eval = FALSE}
+cor(x = x, y = y, use = "pairwise.complete.obs", method = "kendall")
+```
+Die Reihenfolge der übergebenen Argumente umgeordnet und partial matching für
+Argumente `use` und `method` vermieden
+
+# Aufgabe b.
+
+```{r, eval = FALSE}
+f1 <- function(x = {
+    y <- 1
+    2
+  }, y = 0) {
+  x + y
+}
+```
+Die Funktion gibt den Wert 3 zurück.
+`y` erhält den Defaultwert 0; `x` erhält einen Ausdruck, der erst ausgewertet 
+wird sobald `x` innerhalb des Funktionsrumpfes aufgerufen wird. Wird `x`in der
+Funktion aufgerufen, so erhält `y` durch Zuweisung mittels `<-` den Wert 1 und
+`x` erhält den Wert 2. Das illustrierte Prinzip ist lazy evaluation und erklärt
+die Rückgabe falls man `x + y` durch `c(y, x, y)` ersetzt. `y` besitzt hier
+zuerst den Defaultwert 0 und nach Evaluation von `x` greift `y <- 1` und verändert
+somit den zweiten `y`-Wert des Vektors.
+
+# Aufgabe c.
+
+```{r eval = FALSE}
+f2 <- function(x = z) {
+  z <- 100
+  x
+}
+```
+Die Funktion gibt den Wert 100 zurück. Aufgrund des Prinzips der lazy evaluation
+können sich Defaultargumente selbst auf Variablen beziehen, die erst später im
+Funktionsrumpf definiert werden,  da R beim Erstellen der Funktion nicht die
+Existenz der Variable `z` überprüft.
+
+# Aufgabe e.
+
+Innerhalb einer Funktion lässt sich der "Urzustand" z.B. mittels Zuweisungen
+`opar <- par()` oder z.B. `oopt <- options()` abgespeichern. Am Ende einer
+Funktion kann dann mit `on.exit(par(opar), add = TRUE)` und 
+`on.exit(options(oopt), add = TRUE)` wieder in der Urzustand hergestellt werden.
+
+# Aufgabe g.
+Der Code gibt einen named Vektor der Länge 1 zurück mit dem Namen `c` und Wert
+10 zurück. Das erste `c` ruft die Funktion `c()` auf, die Elementa darin zu einem
+Vektor kombiniert. Das zweite `c` stellt den Namen des Elements im Vektor dar.
+Das dritte `c` übergibt den Wert 10, der zuvor an `c` gebunden wurde.
